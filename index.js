@@ -7,16 +7,18 @@ const terminalLink = require('terminal-link');
 const app = require('./app');
 const PORT = process.env.PORT || 3000;
 
+const localIpAddress = getLocalIpAddress();
+const message = `Server running on PORT ${PORT} \n http://${localIpAddress}:${PORT} - http://127.0.0.1:${PORT}`;
+
 app.get('/', (req, res) => {
-  res.send(`Server is running on PORT ${PORT} ...`);
+  res.send(message);
 });
 
 //If database is connected,Server is run.
 app.listen(PORT, () => {
-  const localIpAddress = getLocalIpAddress();
   const serverLink = terminalLink(
-    chalk.bold(`Server running on PORT ${PORT} ...`),
-    `http://${localIpAddress}:${PORT}`,
+    chalk.bold(message),
+    `http://127.0.0.1:${PORT}`,
   );
 
   console.log(serverLink);

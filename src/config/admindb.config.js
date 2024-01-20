@@ -1,31 +1,26 @@
 require('dotenv').config();
 
-const { DB_CONNECTION, DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD } =
-  process.env;
+const { DB_NAME, DB_PATH = './storage' } = process.env;
+
+const storagePath = (env) => {
+  if (env === 'production') {
+    return `${DB_PATH}/${DB_NAME}.sqlite3`;
+  } else {
+    return `${DB_PATH}/${DB_NAME}_${env}.sqlite3`;
+  }
+};
 
 module.exports = {
   development: {
-    username: DB_USERNAME || 'root',
-    password: DB_PASSWORD || 'root',
-    database: DB_DATABASE || 'database_development',
-    host: DB_HOST || '127.0.0.1',
-    dialect: DB_CONNECTION || 'mysql',
-    charset: 'utf8',
-    collation: 'utf8_unicode_ci',
-    timezone: '+06:30',
+    dialect: 'sqlite',
+    storage: storagePath('development'),
   },
   test: {
-    username: DB_USERNAME,
-    password: DB_PASSWORD,
-    database: DB_DATABASE,
-    host: DB_HOST,
-    dialect: DB_CONNECTION,
+    dialect: 'sqlite',
+    storage: storagePath('test'),
   },
   production: {
-    username: DB_USERNAME,
-    password: DB_PASSWORD,
-    database: DB_DATABASE,
-    host: DB_HOST,
-    dialect: DB_CONNECTION,
+    dialect: 'sqlite',
+    storage: storagePath('production'),
   },
 };
